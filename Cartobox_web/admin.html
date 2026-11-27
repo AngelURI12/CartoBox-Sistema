@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CartoBox México - Panel de Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- PANTALLA DE LOGIN          -->
+   
+    <div id="pantallaLogin" class="d-flex align-items-center justify-content-center min-vh-100 bg-dark">
+        <div class="card border-0 shadow-lg" style="max-width: 420px; width: 100%;">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-box-seam-fill text-warning" style="font-size: 4rem;"></i>
+                    <h3 class="fw-bold mt-3">CartoBox México</h3>
+                    <p class="text-muted small">Panel de Administración</p>
+                </div>
+
+                <form id="formLogin">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label fw-semibold">Correo Electrónico</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="correo@ejemplo.com" required autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label fw-semibold">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <div id="loginError" class="alert alert-danger d-none small py-2" role="alert"></div>
+
+                    <button type="submit" class="btn btn-warning w-100 fw-bold py-2 mt-3" id="btnLogin">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <small class="text-muted d-block mb-2">Sistema de Gestión de Inventario</small>
+                    <div class="border-top pt-3 mt-3">
+                        <small class="text-muted d-block">
+                            <i class="bi bi-info-circle me-1"></i><strong>Credenciales de demostración</strong>
+                        </small>
+                        <small class="text-secondary d-block font-monospace mt-1" style="font-size: 0.75rem;">
+                            Email: uriel@cartobox.mx<br>
+                            Contraseña: password123
+                        </small>
+                    </div>
+                    <div class="mt-3">
+                        <a href="index.html" class="text-warning small text-decoration-none">
+                            <i class="bi bi-arrow-left me-1"></i> Volver al sitio público
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO DE LA APP   -->
+   
+    <div id="appContenido" class="d-none d-flex flex-column min-vh-100">
+
+        <!-- HEADER & NAV -->
+        <header class="sticky-top">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm" aria-label="Navegación principal">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#">
+                        <i class="bi bi-box-seam-fill text-warning fs-3"></i>
+                        <span>CartoBox México</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuMain" aria-controls="menuMain" aria-expanded="false" aria-label="Abrir menú de navegación">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="menuMain">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#inicio"><i class="bi bi-house-door me-1"></i>Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#metricas"><i class="bi bi-speedometer2 me-1"></i>Métricas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#catalogo"><i class="bi bi-grid me-1"></i>Catálogo & Stock</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pedidos"><i class="bi bi-cart-plus me-1"></i>Pedidos</a>
+                            </li>
+                        </ul>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="navbar-text text-light small d-none d-md-inline">
+                                <i class="bi bi-geo-alt-fill text-warning me-1"></i>Almacén Central CDMX
+                            </span>
+                            <span class="navbar-text text-warning small d-none d-md-inline" id="infoUsuario">
+                                <i class="bi bi-person-circle me-1"></i><span id="usuarioEmail">---</span>
+                            </span>
+                            <a href="index.html" class="btn btn-outline-light btn-sm" title="Ir al sitio público">
+                                <i class="bi bi-globe"></i> Sitio público
+                            </a>
+                            <button class="btn btn-outline-warning btn-sm" id="btnLogout" title="Cerrar sesión">
+                                <i class="bi bi-box-arrow-right"></i> Salir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- MAIN -->
+        <main class="container-fluid flex-grow-1 py-4 px-lg-5" id="inicio">
+
+            <!-- CARRUSEL -->
+            <section class="mb-5" aria-label="Destacados del Almacén">
+                <div id="carouselCartoBox" class="carousel slide carousel-fade shadow rounded-3 overflow-hidden" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselCartoBox" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+                        <button type="button" data-bs-target="#carouselCartoBox" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+                        <button type="button" data-bs-target="#carouselCartoBox" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" data-bs-interval="4000">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80" class="d-block w-100 object-fit-cover" style="height: 400px;" alt="Almacén de cajas y tarimas de cartón corrugado">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 p-4 rounded-3 text-start">
+                                <h2 class="fw-bold text-warning"><i class="bi bi-boxes me-2"></i>Soluciones de Cartón Corrugado</h2>
+                                <p class="mb-0">Diseño y fabricación de empaques a la medida para distribución e industria pesada.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item" data-bs-interval="4000">
+                            <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80" class="d-block w-100 object-fit-cover" style="height: 400px;" alt="Despacho logístico y camiones de carga">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 p-4 rounded-3 text-start">
+                                <h2 class="fw-bold text-warning"><i class="bi bi-truck me-2"></i>Despacho Logístico en CDMX</h2>
+                                <p class="mb-0">Control automatizado de salidas de almacén y rutas de distribución local.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item" data-bs-interval="4000">
+                            <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80" class="d-block w-100 object-fit-cover" style="height: 400px;" alt="Escanear inventario y control de empaques">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 p-4 rounded-3 text-start">
+                                <h2 class="fw-bold text-warning"><i class="bi bi-qr-code-scan me-2"></i>Control Digital de Inventarios</h2>
+                                <p class="mb-0">Monitoreo dinámico de stock crítico y registros de entradas/salidas en tiempo real.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCartoBox" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCartoBox" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- MÉTRICAS -->
+            <section class="row g-3 mb-5" id="metricas" aria-label="Métricas del sistema">
+                <div class="col-12 col-md-4">
+                    <article class="card border-0 shadow-sm border-start border-primary border-4 h-100">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="text-muted text-uppercase fw-semibold mb-1 small">Total SKUs</h6>
+                                <h3 class="mb-0 fw-bold" id="metric-skus">0</h3>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                                <i class="bi bi-boxes fs-3"></i>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-12 col-md-4">
+                    <article class="card border-0 shadow-sm border-start border-success border-4 h-100">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="text-muted text-uppercase fw-semibold mb-1 small">Unidades Totales</h6>
+                                <h3 class="mb-0 fw-bold" id="metric-unidades">0</h3>
+                            </div>
+                            <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+                                <i class="bi bi-archive-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-12 col-md-4">
+                    <article class="card border-0 shadow-sm border-start border-danger border-4 h-100">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="text-muted text-uppercase fw-semibold mb-1 small">Alertas (Crítico/Reorden)</h6>
+                                <h3 class="mb-0 fw-bold text-danger" id="metric-alertas">0</h3>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+                                <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- CATÁLOGO -->
+            <section class="mb-5" id="catalogo" aria-label="Líneas de empaque y existencias">
+                <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+                    <h3 class="fw-bold text-dark m-0"><i class="bi bi-grid-3x3-gap-fill text-warning me-2"></i>Líneas de Empaque Registradas</h3>
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="badge bg-dark px-3 py-2">Filtro de Estado Activo</span>
+                        <button class="btn btn-primary btn-sm fw-bold" id="btnNuevoProducto" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto">
+                            <i class="bi bi-plus-circle me-1"></i> Nuevo Producto
+                        </button>
+                    </div>
+                </div>
+                <div class="grid-tarjetas" id="contenedorTarjetas"></div>
+            </section>
+
+           
+            <!-- SECCIÓN DE PEDIDOS                    -->
+    
+            <section class="row justify-content-center my-5" id="pedidos">
+                <div class="col-12 col-lg-10 col-xl-9">
+                    <div class="card border-0 shadow">
+                        <div class="card-header bg-dark text-white py-3">
+                            <h4 class="card-title fw-bold mb-0 text-warning d-flex align-items-center gap-2">
+                                <i class="bi bi-cart-plus"></i> Gestión de Pedidos
+                            </h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-4">Historial de pedidos recibidos (públicos). Puedes cambiar el estado de cada pedido según su progreso (Despachado, Entregado, etc.).</p>
+
+                            <!-- Tabla de Pedidos -->
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle" id="tablaPedidos">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Total</th>
+                                            <th>Origen</th>
+                                            <th>Estado</th>
+                                            <th>Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyPedidos">
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">No hay pedidos registrados.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-dark text-light py-4 mt-auto border-top border-warning border-3">
+            <div class="container-fluid text-center">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6 text-md-start mb-2 mb-md-0">
+                        <span class="fw-bold text-warning">CartoBox México</span> &copy; 2026 — Sistema Logístico de Almacén
+                    </div>
+                    <div class="col-12 col-md-6 text-md-end text-muted small">
+                        Licenciatura en Informática | Universidad Nacional Autónoma de México
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL DETALLE -->
+    <div class="modal fade" id="modalDetalleStock" tabindex="-1" aria-labelledby="modalDetalleStockLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white border-bottom border-warning border-3">
+                    <h5 class="modal-title fw-bold text-warning" id="modalDetalleStockLabel">
+                        <i class="bi bi-box-seam me-2"></i>Detalle de Insumo
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-3">
+                        <span id="modalEstadoBadge" class="badge bg-secondary fs-6 px-3 py-2 mb-2">Estado</span>
+                        <h4 id="modalNombreProducto" class="fw-bold text-dark mb-1">Nombre Producto</h4>
+                        <p class="font-monospace text-muted small" id="modalSKU">SKU: ---</p>
+                    </div>
+                    <ul class="list-group list-group-flush border-top border-bottom my-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary"><i class="bi bi-tags me-2"></i>Categoría:</span>
+                            <span class="fw-bold text-dark" id="modalCategoria">---</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary"><i class="bi bi-archive me-2"></i>Stock Actual:</span>
+                            <span class="fw-bold fs-5 text-primary" id="modalStock">0 pzas</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary"><i class="bi bi-geo-alt me-2"></i>Ubicación Física:</span>
+                            <span class="fw-bold text-dark" id="modalUbicacion">---</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary px-4 fw-semibold" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR -->
+    <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-warning text-dark border-bottom border-dark border-3">
+                    <h5 class="modal-title fw-bold" id="modalEditarProductoLabel">
+                        <i class="bi bi-pencil-square me-2"></i>Editar Producto
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEditarProducto">
+                        <input type="hidden" id="edit-id">
+                        <div class="mb-3">
+                            <label for="edit-sku" class="form-label font-monospace fw-semibold">SKU</label>
+                            <input type="text" class="form-control font-monospace" id="edit-sku" readonly>
+                            <small class="text-muted">El SKU no se puede modificar.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-nombre" class="form-label font-monospace fw-semibold">Nombre / Descripción</label>
+                            <input type="text" class="form-control" id="edit-nombre" required minlength="3">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-stock" class="form-label font-monospace fw-semibold">Stock</label>
+                            <input type="number" class="form-control" id="edit-stock" required min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-categoria" class="form-label font-monospace fw-semibold">Categoría</label>
+                            <select class="form-select" id="edit-categoria" required>
+                                <option value="Cartón Corrugado">Cartón Corrugado</option>
+                                <option value="Material de Protección">Material de Protección</option>
+                                <option value="Insumos de Sellado">Insumos de Sellado</option>
+                                <option value="Empaque Especializado">Empaque Especializado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-ubicacion" class="form-label font-monospace fw-semibold">Ubicación en Bodega</label>
+                            <input type="text" class="form-control" id="edit-ubicacion" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning px-4 fw-bold" id="btnGuardarEdicion">
+                        <i class="bi bi-save-fill me-1"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NUEVO PRODUCTO                                 -->
+   
+    <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-bottom border-dark border-3">
+                    <h5 class="modal-title fw-bold" id="modalNuevoProductoLabel">
+                        <i class="bi bi-plus-circle me-2"></i>Registrar Nuevo Producto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formNuevoProducto" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="nuevo-sku" class="form-label font-monospace fw-semibold">SKU del Producto <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control font-monospace text-uppercase" id="nuevo-sku" placeholder="Ej. CB-403030-DC" pattern="^[A-Z0-9\-]{6,15}$" required>
+                            <div class="invalid-feedback">Usa de 6 a 15 caracteres en mayúsculas.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nuevo-nombre" class="form-label font-monospace fw-semibold">Nombre / Descripción <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nuevo-nombre" placeholder="Ej. Caja Regular Doble Canto" minlength="5" required>
+                            <div class="invalid-feedback">Mínimo 5 caracteres.</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="nuevo-stock" class="form-label font-monospace fw-semibold">Cantidad Inicial <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="nuevo-stock" min="1" max="100000" value="1" required>
+                                <div class="invalid-feedback">Mayor a 0.</div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="nuevo-categoria" class="form-label font-monospace fw-semibold">Categoría <span class="text-danger">*</span></label>
+                                <select class="form-select" id="nuevo-categoria" required>
+                                    <option value="" selected disabled>Elige...</option>
+                                    <option value="Cartón Corrugado">Cartón Corrugado</option>
+                                    <option value="Material de Protección">Material de Protección</option>
+                                    <option value="Insumos de Sellado">Insumos de Sellado</option>
+                                    <option value="Empaque Especializado">Empaque Especializado</option>
+                                </select>
+                                <div class="invalid-feedback">Selecciona una.</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nuevo-ubicacion" class="form-label font-monospace fw-semibold">Ubicación en Bodega <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nuevo-ubicacion" placeholder="Ej. Pasillo A-04" required>
+                            <div class="invalid-feedback">Indica la ubicación física.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnGuardarNuevoProducto">
+                        <i class="bi bi-save-fill me-1"></i> Guardar Producto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
